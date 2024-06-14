@@ -1,4 +1,5 @@
 Catálogo de Películas
+
 Este proyecto Python implementa un sistema de gestión de catálogos de películas, permitiendo a los usuarios crear, modificar y administrar catálogos personalizados de películas. 
 - Mediante una interfaz de línea de comandos (CLI).
 
