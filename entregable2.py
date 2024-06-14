@@ -27,9 +27,10 @@ class CatalogoPeliculas:
         if os.path.exists(self.ruta_archivo):
             with open(self.ruta_archivo, 'r', encoding= 'utf-8') as archivo:
                 for linea in archivo:
-                    titulo, director, año, genero, calificacion = linea.strip().split(',')
-                    peliculas.append(Pelicula(titulo, director, int(año), genero, float(calificacion)))
-            return peliculas 
+                    if linea.strip(): # Verifica que la línea no esté vacía
+                        titulo, director, año, genero, calificacion = linea.strip().split(',')
+                        peliculas.append(Pelicula(titulo, director, int(año), genero, float(calificacion)))
+        return peliculas 
         
     def guardar_peliculas(self): 
         with open(self.ruta_archivo, 'w', encoding = 'utf-8') as archivo:
@@ -40,7 +41,7 @@ class CatalogoPeliculas:
         self.peliculas.append(pelicula)
         print(f"Película '{pelicula.titulo}' agregada al catálogo.")
     
-    def eliminar_pelicula(self, titulo):  # Cambié para aceptar título
+    def eliminar_pelicula(self, titulo):  
         pelicula_a_eliminar = None
         for pelicula in self.peliculas:
             if pelicula.titulo == titulo:
@@ -82,7 +83,7 @@ def main():
 
     while True:
         mostrar_menu()
-        opcion = int(input("Ingrese una opción: "))
+        opcion = int(input("\nIngrese una opción: "))
         
         if opcion == 1:
             titulo = input("Ingrese el título de la película: ")
@@ -91,7 +92,7 @@ def main():
             genero = input("Ingrese el género de la película: ")
             calificacion = float(input("Ingrese la calificación de la película: "))
             pelicula = Pelicula(titulo, director, año, genero, calificacion)
-            catalogo.agregar_peliculas(pelicula)
+            catalogo.agregar_pelicula(pelicula)
         elif opcion == 2:
             titulo = input("Ingrese el título de la película a eliminar: ")
             catalogo.eliminar_pelicula(titulo)
