@@ -1,4 +1,6 @@
 import os 
+#Agregar Docstrings
+#Guardar archivos txt en una carpeta, salen todos en carpeta principal sin orden
 class Pelicula:
     
     def __init__(self, titulo, director, año, genero, calificacion):
@@ -196,7 +198,7 @@ class Funcionamientos():
             else:
                 Funcionamientos.mostrar_menu_principal()
                 
-            opcion = int(input("\nIngrese una opción: "))
+            opcion = int(input("\nIngrese una opción: ")) #como sabe el usuario que debe digitar, no tiene sentido. Arreglar 
         
         if catalogo_actual:
             if opcion == 1:
@@ -215,7 +217,7 @@ class Funcionamientos():
                 catalogo_actual.listar_peliculas()
             elif opcion == 4:
                 titulo = input("Ingrese el título de la película a buscar")
-                catalogo_actual.buscar_pelicula(titulo) #Mostrar antes de nombrar a un catalogo, mover. No funciona el codigo  
+                catalogo_actual.buscar_pelicula(titulo) 
             elif opcion == 5:
                 titulo = input("Ingrese el título de la película a actualizar")
                 catalogo_actual.actualizar.pelicula(titulo)
@@ -237,7 +239,7 @@ class Funcionamientos():
                 print("\n==================================================")
                 print("      Saliendo del programa. ¡Adiós!")
                 print("==================================================")
-                break
+                break #No sirve el programa por esto
             else:
                 print("\n==================================================")
                 print("      Opción no válida. Intente de nuevo.")
