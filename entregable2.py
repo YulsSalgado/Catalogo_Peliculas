@@ -17,11 +17,37 @@ class Pelicula:
                 f"Año: {self.año}, Género: {self.genero}, Calificación: {self.calificacion}")
     
 class CatalogoPeliculas:
+    catalogos_creados = []
     def __init__(self, nombre):
         self.nombre = nombre
         self.ruta_archivo = f"{nombre}.txt"
         self.peliculas = self.cargar_peliculas()
-    
+        
+        # Verificar y crear el archivo si no existe
+        if not os.path.exists(self.ruta_archivo):
+            with open(self.ruta_archivo, 'w', encoding='utf-8') as archivo:
+                archivo.write("")  # Escribir un archivo vacío si es nuevo
+        
+        self.registrar_catalogo()
+        
+    def registrar_catalogo(self):
+        if self.nombre not in CatalogoPeliculas.catalogos_creados:
+            CatalogoPeliculas.catalogos_creados.append(self.nombre)
+            print(f"\n==================================================")
+            print(f"      Catálogo '{self.nombre}' creado.")
+            print(f"==================================================")
+        
+    def listar_catalogos():
+        if CatalogoPeliculas.catalogos_creados:
+            print(f"\n==================================================")
+            print(f"      Catálogos existentes:")
+            print(f"==================================================")
+            for catalogo in CatalogoPeliculas.catalogos_creados:
+                print(f"      {catalogo}")
+            print(f"==================================================")
+        else: 
+            print("No hay catálogos de películas creados")
+           
     def cargar_peliculas(self):
         peliculas = []
         if os.path.exists(self.ruta_archivo):
@@ -39,7 +65,9 @@ class CatalogoPeliculas:
     
     def agregar_pelicula(self, pelicula):
         self.peliculas.append(pelicula)
-        print(f"Película '{pelicula.titulo}' agregada al catálogo.")
+        print ("\n==================================================")
+        print(f"      Película '{pelicula.titulo}' agregada al catálogo.")
+        print ("==================================================")
     
     def eliminar_pelicula(self, titulo):  
         pelicula_a_eliminar = None
@@ -49,35 +77,50 @@ class CatalogoPeliculas:
                 break
         if pelicula_a_eliminar:
             self.peliculas.remove(pelicula_a_eliminar)
-            print(f"Película '{titulo}' eliminada del catálogo.")
+            ("\n==================================================")
+            print(       f"Película '{titulo}' eliminada del catálogo.")
+            ("\n==================================================")
         else:
-            print(f"No se encontró la película '{titulo}' en el catálogo.")
+            ("\n==================================================")
+            print(       f"No se encontró la película '{titulo}' en el catálogo.")
+            ("\n==================================================")
     
     def listar_peliculas(self):
         if self.peliculas:
             print("Catálogo de películas")
             for pelicula in self.peliculas:
                 print(pelicula)
-        else: 
-            print("El Catálogo está vacío.")
+        else:
+            ("\n==================================================")
+            print(        "El Catálogo está vacío.")
+            ("\n==================================================")
             
     def eliminar_catalogo(self):
         if os.path.exists(self.ruta_archivo):
             os.remove(self.ruta_archivo)
             self.peliculas = []
-            print(f"Catálogo '{self.nombre}' eliminado.")
+            ("\n==================================================")
+            print(      f"Catálogo '{self.nombre}' eliminado.")
+            ("\n==================================================")
         else: 
-            print("El catálogo no existe.")
+            ("\n==================================================")
+            print(         "El catálogo no existe.")
+            ("\n==================================================")
     
 def mostrar_menu():
     print("\nBienvenido al sistema de películas")
     print("1. Agregar Película")
     print("2. Eliminar Película")
     print("3. Listar Película")
-    print("4. Eliminar Catálogo")
-    print("5. Salir")
+    print("4. Listar Catálogos")
+    print("5. Eliminar Catálogo")
+    print("6. Salir")
     
 def main():
+    
+    print ("=============================================================================")
+    print("                  ¡Bienvenido al Cátalogo de Películas! 🎥")
+    print ("=============================================================================\n")
     nombre_catalogo = input("Ingrese el nombre del catálogo de películas: ")
     catalogo = CatalogoPeliculas(nombre_catalogo) 
 
@@ -99,13 +142,19 @@ def main():
         elif opcion == 3:
             catalogo.listar_peliculas()
         elif opcion == 4:
-            catalogo.eliminar_catalogo()
+            catalogo.listar_catalogos() #Mostrar antes de nombrar a un catalogo, mover. No funciona el codigo  
         elif opcion == 5:
+            catalogo.eliminar_catalogo()
+        elif opcion == 6:
             catalogo.guardar_peliculas()
-            print("Saliendo del programa. ¡Adiós!")
+            ("\n==================================================")
+            print(      "Saliendo del programa. ¡Adiós!")
+            ("\n==================================================")
             break
         else:
-            print("Opción no válida. Intente de nuevo.")
+            ("\n==================================================")
+            print(     "Opción no válida. Intente de nuevo.")
+            ("\n==================================================")
 
 if __name__ == "__main__":
     main()
