@@ -1,6 +1,7 @@
 import os 
 #Agregar Docstrings
 #Guardar archivos txt en una carpeta, salen todos en carpeta principal sin orden
+#Agregar papelera de reciclaje
 class Pelicula:
     
     def __init__(self, titulo, director, año, genero, calificacion):
@@ -20,7 +21,21 @@ class Pelicula:
     
 class CatalogoPeliculas:
     catalogos_creados = []
+    
     def __init__(self, nombre):
+        """
+                Inicializa una nueva instancia de CatalogoPeliculas.
+                
+                Parámetros:
+                nombre (str): El nombre del catálogo.
+                
+                Atributos:
+                nombre (str): El nombre del catálogo.
+                ruta_archivo (str): La ruta al archivo donde se almacenan los datos del catálogo.
+                peliculas (list): Una lista de instancias de Pelicula en el catálogo.
+                
+                Crea un nuevo archivo si el archivo del catálogo no existe.
+        """
         self.nombre = nombre
         self.ruta_archivo = f"{nombre}.txt"
         self.peliculas = self.cargar_peliculas()
@@ -41,12 +56,13 @@ class CatalogoPeliculas:
         
     def listar_catalogos():
         if CatalogoPeliculas.catalogos_creados:
-            print(f"\n==================================================")
-            print(f"      Catálogos existentes:")
+            print(f"\n================================================")
+            print(f"            Catálogos existentes:")
             print(f"==================================================")
             for catalogo in CatalogoPeliculas.catalogos_creados:
-                print(f"      {catalogo}")
-            print(f"==================================================")
+                print(f"==================================================")
+                print(f"                 {catalogo}")
+                print(f"==================================================")
         else: 
             print("No hay catálogos de películas creados")
            
@@ -79,23 +95,36 @@ class CatalogoPeliculas:
                 break
         if pelicula_a_eliminar:
             self.peliculas.remove(pelicula_a_eliminar)
-            ("\n==================================================")
+            print("\n==================================================")
             print(       f"Película '{titulo}' eliminada del catálogo.")
-            ("\n==================================================")
+            print("==================================================")
         else:
-            ("\n==================================================")
-            print(       f"No se encontró la película '{titulo}' en el catálogo.")
-            ("\n==================================================")
+            print("\n==================================================")
+            print(    f"No se encontró la película '{titulo}' en el catálogo.")
+            print("==================================================")
     
+    def papelera_reciclaje(self, titulo):
+        pelicula_a_recuperar = None
+        for i, pelicula in enumerate(self.peliculas):
+            if pelicula.titulo == titulo:
+                pelicula_a_recuperar = self.peliculas.pop(i) 
+                break
+        if pelicula_a_recuperar:
+            pelicula_a_recuperar = pelicula
+            print(f"Película '{pelicula_a_recuperar}' recuperada.")
+        else: 
+            print(f"No se encontró la película '{pelicula_a_recuperar}' en el catálogo.")
+            
     def listar_peliculas(self):
         if self.peliculas:
             print("Catálogo de películas")
             for pelicula in self.peliculas:
                 print(pelicula)
         else:
-            ("\n==================================================")
-            print(        "El Catálogo está vacío.")
-            ("\n==================================================")
+            print("\n==================================================")
+            print(            "El Catálogo está vacío."                 )
+            print("==================================================")
+            
     def buscar_pelicula(self, titulo):
         for pelicula in self.peliculas:
             if pelicula.titulo == titulo:
@@ -132,21 +161,21 @@ class CatalogoPeliculas:
                 print("\n==================================================")
                 print(f"      No se encontró la película '{titulo}' en el catálogo.")
                 print("==================================================")
+                
     def eliminar_catalogo(self):
         if os.path.exists(self.ruta_archivo):
             os.remove(self.ruta_archivo)
             self.peliculas = []
-            ("\n==================================================")
+            print("\n==================================================")
             print(      f"Catálogo '{self.nombre}' eliminado.")
-            ("\n==================================================")
+            print("==================================================")
         else: 
-            ("\n==================================================")
+            print("\n==================================================")
             print(         "El catálogo no existe.")
-            ("\n==================================================")
+            print("==================================================")
+            
+class Funcionamientos(): #Nueva clase, quitar staticmethod
     
-class Funcionamientos():
-
-    @staticmethod
     def mostrar_menu_principal():
         print("\nBienvenido al sistema de películas")
         print("1. Seleccionar Catálogo")
@@ -154,7 +183,7 @@ class Funcionamientos():
         print("3. Listar Catálogos")
         print("4. Salir")
         
-    @staticmethod
+
     def mostrar_menu_catalogo():
         print("\nOpciones del catálogo")
         print("1. Agregar Película")
@@ -174,7 +203,6 @@ class Funcionamientos():
             print("==================================================")
             return None  
     
-    @staticmethod
     def crear_catalogo():
         nombre_catalogo = input("Ingrese el nombre del catálogo de películas: ")
         if nombre_catalogo in CatalogoPeliculas.catalogos_creados:
@@ -184,7 +212,7 @@ class Funcionamientos():
             return None       
         else:
             return CatalogoPeliculas(nombre_catalogo)
-    @staticmethod
+        
     def main():
         print ("=============================================================================")
         print("                  ¡Bienvenido al Cátalogo de Películas! 🎥")
@@ -198,53 +226,64 @@ class Funcionamientos():
             else:
                 Funcionamientos.mostrar_menu_principal()
                 
-            opcion = int(input("\nIngrese una opción: ")) #como sabe el usuario que debe digitar, no tiene sentido. Arreglar 
-        
-        if catalogo_actual:
-            if opcion == 1:
-                titulo = input("Ingrese el título de la película: ")
-                director = input("Ingrese el director de la película: ")
-                año = int(input("Ingrese el año de la película: "))
-                genero = input("Ingrese el género de la película: ")
-                calificacion = float(input("Ingrese la calificación de la película: "))
-                pelicula = Pelicula(titulo, director, año, genero, calificacion)
-                catalogo_actual.agregar_pelicula(pelicula)
+            opcion = int(input("\nIngrese una opción: ")) #Intentar con try y valuerror para int 
             
-            elif opcion == 2:
-                titulo = input("Ingrese el título de la película a eliminar: ")
-                catalogo_actual.eliminar_pelicula(titulo)
-            elif opcion == 3:
-                catalogo_actual.listar_peliculas()
-            elif opcion == 4:
-                titulo = input("Ingrese el título de la película a buscar")
-                catalogo_actual.buscar_pelicula(titulo) 
-            elif opcion == 5:
-                titulo = input("Ingrese el título de la película a actualizar")
-                catalogo_actual.actualizar.pelicula(titulo)
-            elif opcion == '6':
-                    catalogo_actual.guardar_peliculas()
-                    catalogo_actual = None
-            else:
-                print("\n==================================================")
-                print("      Opción no válida. Intente de nuevo.")
-                print("==================================================")
-        else:
-            if opcion == '1':
-                catalogo_actual = Funcionamientos.seleccionar_catalogo()
-            elif opcion == '2':
-                catalogo_actual = Funcionamientos.crear_catalogo()
-            elif opcion == '3':
-                CatalogoPeliculas.listar_catalogos()
-            elif opcion == '4':
-                print("\n==================================================")
-                print("      Saliendo del programa. ¡Adiós!")
-                print("==================================================")
-                break #No sirve el programa por esto
-            else:
-                print("\n==================================================")
-                print("      Opción no válida. Intente de nuevo.")
-                print("==================================================")
+            if catalogo_actual:
+                if opcion == 1:
+                    titulo = input("Ingrese el título de la película: ")
+                    director = input("Ingrese el director de la película: ")
+                    año = int(input("Ingrese el año de la película: "))
+                    genero = input("Ingrese el género de la película: ")
+                    calificacion = float(input("Ingrese la calificación de la película: "))
+                    pelicula = Pelicula(titulo, director, año, genero, calificacion)
+                    catalogo_actual.agregar_pelicula(pelicula)
 
+                elif opcion == 2:
+                    titulo = input("Ingrese el título de la película a eliminar: ")
+                    catalogo_actual.eliminar_pelicula(titulo)
+                elif opcion == 3:
+                    catalogo_actual.listar_peliculas()
+                elif opcion == 4:
+                    titulo = input("Ingrese el título de la película a buscar: ")
+                    catalogo_actual.buscar_pelicula(titulo) 
+                elif opcion == 5:
+                    titulo = input("Ingrese el título de la película a actualizar: ")
+                    catalogo_actual.actualizar_pelicula(titulo)
+                elif opcion == 6:
+                        catalogo_actual.guardar_peliculas()
+                        print("Guardando y volviendo al menú principal...")
+                        catalogo_actual = Funcionamientos.mostrar_menu_principal()
+                else:
+                    print("\n==================================================")
+                    print("      Opción no válida. Intente de nuevo.")
+                    print("==================================================")
+            else:
+                    if opcion == 1:
+                        catalogo_actual = Funcionamientos.seleccionar_catalogo()
+                    elif opcion == 2:
+                        catalogo_actual = Funcionamientos.crear_catalogo()
+                    elif opcion == 3:
+                        CatalogoPeliculas.listar_catalogos()
+                    elif opcion == 4:
+                        print("\n==================================================")
+                        print("      Saliendo del programa. ¡Adiós!")
+                        print("==================================================")
+                        break 
+                    else:
+                        print("\n==================================================")
+                        print("      Opción no válida. Intente de nuevo.")
+                        print("==================================================")
 
 if __name__ == "__main__":
-    Funcionamientos()
+    Funcionamientos.main()
+    
+#if __name__ == "__main__":
+    #catalogo_prueba = CatalogoPeliculas("PruebaCatalogo")
+    #pelicula_prueba = Pelicula("Pelicula1", "Director1", 2023, "Drama", 4.5)
+    #pelicula_prueba2 = Pelicula("Pelicula2", "Director: 1", 2023, "Infantil", 4.0)
+    #catalogo_prueba.agregar_pelicula(pelicula_prueba)
+    #catalogo_prueba.agregar_pelicula(pelicula_prueba2)
+    #catalogo_prueba.listar_peliculas()
+    #catalogo_prueba.papelera_reciclaje("Pelicula1")
+    #catalogo_prueba.listar_peliculas()
+    
