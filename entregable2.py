@@ -1,8 +1,10 @@
 import os 
-#Agregar Docstrings
 #Guardar archivos txt en una carpeta, salen todos en carpeta principal sin orden
-#Agregar papelera de reciclaje
+
 class Pelicula:
+    """
+    Representa una película con título, director, año, género y calificación.
+    """
     
     def __init__(self, titulo, director, año, genero, calificacion):
         self.__titulo = titulo
@@ -13,13 +15,23 @@ class Pelicula:
         
     @property
     def titulo(self):
+        """
+        Devuelve el título de la película, accediendo al atributo privado.
+        """
         return self.__titulo
     
     def __str__(self):
+        """
+        Devuelve una representación en forma de cadena de la película.
+        """
         return (f"Título: {self.__titulo}, Director: {self.director}, "
                 f"Año: {self.año}, Género: {self.genero}, Calificación: {self.calificacion}")
+        
     
 class CatalogoPeliculas:
+    """
+    Representa un catálogo de películas con muchos métodos.
+    """
     catalogos_creados = []
     
     def __init__(self, nombre):
@@ -38,11 +50,12 @@ class CatalogoPeliculas:
         """
         self.nombre = nombre
         self.ruta_archivo = f"{nombre}.txt"
+        os.makedirs("Catalogos", exist_ok = True) #Crear carpeta para los catálogos
         self.peliculas = self.cargar_peliculas()
         
         # Verificar y crear el archivo si no existe
         if not os.path.exists(self.ruta_archivo):
-            with open(self.ruta_archivo, 'w', encoding='utf-8') as archivo:
+            with open(self.ruta_archivo, 'a', encoding='utf-8') as archivo:
                 archivo.write("")  # Escribir un archivo vacío si es nuevo
         
         self.registrar_catalogo()
@@ -105,13 +118,18 @@ class CatalogoPeliculas:
     
     def papelera_reciclaje(self, titulo):
         pelicula_a_recuperar = None
+        os.makedirs("Papelera", exist_ok=True) #Crea carpeta para papelera
         for i, pelicula in enumerate(self.peliculas):
             if pelicula.titulo == titulo:
                 pelicula_a_recuperar = self.peliculas.pop(i) 
                 break
         if pelicula_a_recuperar:
-            pelicula_a_recuperar = pelicula
-            print(f"Película '{pelicula_a_recuperar}' recuperada.")
+            ruta_reciclaje = os.path.join("Papelera", f"{self.nombre}.txt")
+            with open(ruta_reciclaje, 'a', encoding='utf-8') as archivo:
+                archivo.write(f"{pelicula_a_recuperar.titulo},{pelicula_a_recuperar.director},{pelicula_a_recuperar.año},{pelicula_a_recuperar.genero},{pelicula_a_recuperar.calificacion}\n")
+            print(f"Película '{pelicula_a_recuperar.titulo}' movida y recuperada con éxito.")
+            #Agregar nuevamente al catálogo            
+            self.peliculas.append(pelicula_a_recuperar)
         else: 
             print(f"No se encontró la película '{pelicula_a_recuperar}' en el catálogo.")
             
@@ -175,6 +193,9 @@ class CatalogoPeliculas:
             print("==================================================")
             
 class Funcionamientos(): #Nueva clase, quitar staticmethod
+    """
+    Contiene métodos para mostrar menús y gestionar operaciones del catálogo de películas.
+    """
     
     def mostrar_menu_principal():
         print("\nBienvenido al sistema de películas")
@@ -214,6 +235,10 @@ class Funcionamientos(): #Nueva clase, quitar staticmethod
             return CatalogoPeliculas(nombre_catalogo)
         
     def main():
+        '''
+        Función principal del código
+        '''
+        
         print ("=============================================================================")
         print("                  ¡Bienvenido al Cátalogo de Películas! 🎥")
         print ("=============================================================================\n")
@@ -274,16 +299,17 @@ class Funcionamientos(): #Nueva clase, quitar staticmethod
                         print("      Opción no válida. Intente de nuevo.")
                         print("==================================================")
 
-if __name__ == "__main__":
-    Funcionamientos.main()
-    
 #if __name__ == "__main__":
-    #catalogo_prueba = CatalogoPeliculas("PruebaCatalogo")
-    #pelicula_prueba = Pelicula("Pelicula1", "Director1", 2023, "Drama", 4.5)
-    #pelicula_prueba2 = Pelicula("Pelicula2", "Director: 1", 2023, "Infantil", 4.0)
-    #catalogo_prueba.agregar_pelicula(pelicula_prueba)
-    #catalogo_prueba.agregar_pelicula(pelicula_prueba2)
-    #catalogo_prueba.listar_peliculas()
-    #catalogo_prueba.papelera_reciclaje("Pelicula1")
-    #catalogo_prueba.listar_peliculas()
+    #Funcionamientos.main()
+    
+if __name__ == "__main__":
+    catalogo_prueba = CatalogoPeliculas("PruebaCatalogo")
+    pelicula_prueba = Pelicula("Pelicula1", "Director1", 2023, "Drama", 4.5)
+    pelicula_prueba2 = Pelicula("Pelicula2", "Director: 1", 2023, "Infantil", 4.0)
+    catalogo_prueba.agregar_pelicula(pelicula_prueba)
+    catalogo_prueba.agregar_pelicula(pelicula_prueba2)
+    catalogo_prueba.eliminar_pelicula("Pelicula1")
+    catalogo_prueba.listar_peliculas()
+    catalogo_prueba.papelera_reciclaje("Pelicula1")
+    catalogo_prueba.listar_peliculas()
     
