@@ -3,7 +3,7 @@
 # Catálogo de Películas
 
 Este proyecto es una aplicación de consola para gestionar un catálogo de películas utilizando conceptos de programación orientada a objetos en Python.
-La puntuación de las películas está basada en el rating de la app LetterBox.
+La puntuación de las películas está basada en el rating IMDb.
 
 ## Características
 
